@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "AdicionarView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model noticias.Models.NoticiaModel
+
+@{
+    ViewBag.Title = "Adicionar Notícia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Adicionar Notícia</h2>
+
+@using (Html.BeginForm("Adicionar", "Noticias", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label for="Titulo">Título</label>
+        <input type="text" class="form-control" id="Titulo" name="Titulo" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Subtitulo">Subtítulo</label>
+        <input type="text" class="form-control" id="Subtitulo" name="Subtitulo" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Conteudo">Conteúdo</label>
+        <textarea class="form-control" id="Conteudo" name="Conteudo" rows="5" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="imagemPrincipal">Imagem Principal</label>
+        <input type="file" class="form-control-file" id="imagemPrincipal" name="imagemPrincipal" required />
+    </div>
+
+    <div class="form-group">
+        <label for="imagensCarrossel">Imagens do Carrossel</label>
+        <input type="file" class="form-control-file" id="imagensCarrossel" name="imagensCarrossel" multiple />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Notícia</button>
+}
+
+

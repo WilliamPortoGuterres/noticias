@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "FeedView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<noticias.Models.NoticiaModel>
+
+@{
+    ViewBag.Title = "Feed de Notícias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Feed de Notícias</h2>
+
+<div class="feed-noticias">
+    @foreach (var noticia in Model)
+    {
+        <div class="noticia-resumo mb-4">
+            <h3>@noticia.Titulo</h3>
+            <img src="@noticia.ImagemPrincipal" alt="Imagem de @noticia.Titulo" class="img-fluid" style="max-width: 100%; height: auto;" />
+
+            <p>
+                @noticia.Conteudo.Substring(0, Math.Min(100, noticia.Conteudo.Length))...
+                <a href="@Url.Action("Detalhes", "Noticias", new { id = noticia.Id })">Leia mais</a>
+            </p>
+        </div>
+    }
+</div>
+
+

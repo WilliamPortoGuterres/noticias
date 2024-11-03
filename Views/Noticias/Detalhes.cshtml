@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Detalhes da Notícia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model noticias.Models.NoticiaModel
+
+<div class="noticia-detalhes">
+    <h1>@Model.Titulo</h1>
+    <img src="@Model.ImagemPrincipal" alt="Imagem Principal" class="img-fluid" />
+
+    <h2>@Model.Subtitulo</h2>
+
+    <!-- Carrossel de Imagens -->
+    @if (Model.ImagensCarrossel.Any())
+    {
+        <div id="carrosselImagens" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.ImagensCarrossel.Count; i++)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="@Model.ImagensCarrossel[i]" class="d-block w-100" alt="Imagem @i">
+                    </div>
+                }
+            </div>
+            <a class="carousel-control-prev" href="#carrosselImagens" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#carrosselImagens" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Próximo</span>
+            </a>
+        </div>
+    }
+
+    <!-- Texto completo da notícia -->
+    <div class="conteudo-noticia mt-4">
+        <p>@Model.Conteudo</p>
+    </div>
+
+    <!-- Comentários -->
+    <div class="comentarios mt-4">
+        <h3>Comentários</h3>
+
+        <!-- Formulário para novo comentário -->
+        <form action="@Url.Action("AdicionarComentario", "Noticias")" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="conteudo">Comentário:</label>
+                <textarea name="conteudo" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+
+        <!-- Lista de comentários -->
+        <ul class="list-unstyled mt-4">
+            @foreach (var comentario in Model.Comentarios)
+            {
+                <li class="mb-3">
+                    <strong>@comentario.Nome</strong> - <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+                    <p>@comentario.Conteudo</p>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
