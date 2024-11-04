@@ -98,12 +98,18 @@ namespace noticias.Controllers
             // Salva a notícia em JSON
             NoticiaDAO.AdicionarNoticia(noticia);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Feed","Noticias");
         }
         public ActionResult Feed()
         {
             var noticias = FeedDAO.CarregarFeed();
             return View(noticias);
+        }
+        [HttpGet]
+        public JsonResult ListarNoticias()
+        {
+            List<NoticiaModel> noticias = NoticiaDAO.CarregarNoticias();
+            return Json(noticias, JsonRequestBehavior.AllowGet);
         }
     }
 }

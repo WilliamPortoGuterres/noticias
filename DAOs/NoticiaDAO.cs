@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using noticias.DAO;
+
 
 namespace noticias.DAO
 {
@@ -37,5 +40,7 @@ namespace noticias.DAO
             var noticias = CarregarNoticias();
             return noticias.FirstOrDefault(n => n.Id == id);
         }
+       
     }
+
 }
