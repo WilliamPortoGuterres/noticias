@@ -5,13 +5,25 @@
 
 <h2>Feed de Notícias</h2>
 <div class="row">
+    <div>
+        <h3>Documentos</h3>
+        <ul id="documentsList">
+            <li>
+                <a href="/caminho/para/documento.pdf" target="_blank">Documento PDF</a>
+                <button onclick="addFavoriteDocument('Documento PDF', '/caminho/para/documento.pdf')">Favoritar</button>
+            </li>
+            <!-- Adicione mais documentos conforme necessário -->
+        </ul>
+    </div>
     <div style="width: 50%; float: right; border-left: 1px solid #ccc; padding: 10px;">
         <h3>Favoritos</h3>
         <ul id="favoriteLinks"></ul>
+        <!-- Para adicionar links diretamente -->
         <input type="text" id="newLinkName" placeholder="Nome do link" />
         <input type="text" id="newLinkUrl" placeholder="URL do link" />
-        <button onclick="addFavoriteLink()">Adicionar</button>
+        <button onclick="addFavoriteLink(document.getElementById('newLinkName').value, document.getElementById('newLinkUrl').value)">Adicionar Link</button>
     </div>
+
 
 
 
@@ -46,6 +58,25 @@
     });
 
     const chaveUser = 'F81587'
+    async function addFavorite(itemType, title, url) {
+        const userId = chaveUser; // Exemplo de ID do usuário
+        await fetch(`/favoriteApi/AddFavorite?userId=${userId}&title=${title}&url=${url}&type=${itemType}`, {
+            method: 'POST'
+        });
+
+        loadFavorites(userId); // Recarregar a lista após adicionar o item
+    }
+
+    // Exemplo de uso para adicionar um documento como favorito
+    async function addFavoriteDocument(title, url) {
+        await addFavorite("documento", title, url);
+    }
+
+    // Exemplo de uso para adicionar um link como favorito
+    async function addFavoriteLink(title, url) {
+        await addFavorite("link", title, url);
+    }
+
     async function loadFavorites(userId) {
         const response = await fetch(`/favoriteApi/GetFavorites?userId=${userId}`);
         const data = await response.json();
@@ -55,23 +86,11 @@
         data.Favorites.forEach(link => {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
-            <a href="${link.Url}" target="_blank">${link.Title}</a>
+            <a href="${link.Url}" target="_blank">${link.Title}</a> (${link.Type})
             <button onclick="removeFavoriteLink('${userId}', '${link.Title}')">Remover</button>
         `;
             favoriteLinks.appendChild(listItem);
         });
-    }
-
-    async function addFavoriteLink() {
-        const title = document.getElementById('newLinkName').value;
-        const url = document.getElementById('newLinkUrl').value;
-        const userId = chaveUser; // Exemplo de ID
-
-        await fetch(`/favoriteApi/AddFavorite?userId=${userId}&title=${title}&url=${url}`, {
-            method: 'POST'
-        });
-
-        loadFavorites(userId); // Recarregar a lista após adicionar o link
     }
 
     async function removeFavoriteLink(userId, title) {
@@ -84,6 +103,7 @@
 
     // Carregar os favoritos ao carregar a página
     loadFavorites(chaveUser);
+
 
 
 </script>

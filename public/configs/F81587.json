@@ -2,11 +2,18 @@
   "Favorites": [
     {
       "Title": "william",
-      "Url": "https://animesonlinecc.to/episodio/"
+      "Url": "https://animesonlinecc.to/episodio/",
+      "Type": null
     },
     {
       "Title": "dsgaeds",
-      "Url": "https://animesonlinecc.to/episodio/"
+      "Url": "https://animesonlinecc.to/episodio/",
+      "Type": null
+    },
+    {
+      "Title": "Documento PDF",
+      "Url": "/caminho/para/documento.pdf",
+      "Type": "document"
     }
   ]
 }

@@ -36,7 +36,7 @@ namespace noticias.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddFavorite(string userId, string title, string url)
+        public JsonResult AddFavorite(string userId, string title, string url, string type)
         {
             string filePath = GetJsonFilePath(userId);
 
@@ -51,12 +51,13 @@ namespace noticias.Controllers
                 favorites = new UserFavorites();
             }
 
-            favorites.Favorites.Add(new FavoriteLink { Title = title, Url = url });
+            favorites.Favorites.Add(new FavoriteLink { Title = title, Url = url, Type = type });
             var updatedJson = JsonConvert.SerializeObject(favorites, Formatting.Indented);
             System.IO.File.WriteAllText(filePath, updatedJson);
 
             return Json(favorites);
         }
+
         [HttpPost]
         public JsonResult RemoveFavorite(string userId, string title)
         {
@@ -85,6 +86,7 @@ namespace noticias.Controllers
     {
         public string Title { get; set; }
         public string Url { get; set; }
+        public string Type { get; set; }
     }
 
     public class UserFavorites
