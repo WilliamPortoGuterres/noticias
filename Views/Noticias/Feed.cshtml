@@ -4,8 +4,22 @@
 }
 
 <h2>Feed de Notícias</h2>
+<div class="row">
+    <div style="width: 50%; float: right; border-left: 1px solid #ccc; padding: 10px;">
+        <h3>Favoritos</h3>
+        <ul id="favoriteLinks"></ul>
+        <input type="text" id="newLinkName" placeholder="Nome do link" />
+        <input type="text" id="newLinkUrl" placeholder="URL do link" />
+        <button onclick="addFavoriteLink()">Adicionar</button>
+    </div>
 
-<div id="feed-noticias" class="feed-noticias"></div>
+
+
+</div>
+<div class="row">
+
+    <div id="feed-noticias" class="feed-noticias"></div>
+</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -19,7 +33,7 @@
 
                     noticiaElement.innerHTML = `
                         <h3>${noticia.Titulo}</h3>
-                        <img src="${noticia.ImagemPrincipal}" alt="Imagem de ${noticia.Titulo}" class="img-fluid" style="max-width: 100%; height: auto;" />
+                        <img src="${noticia.ImagemPrincipal}" alt="Imagem de ${noticia.Titulo}" class="img-fluid" style="max-width: 200px; height: auto;" />
                         <p>
                             ${noticia.Conteudo.substring(0, 100)}...
                             <a href="/Noticias/Detalhes/${noticia.Id}">Leia mais</a>
@@ -30,4 +44,46 @@
             })
             .catch(error => console.error('Erro ao carregar o feed de notícias:', error));
     });
+
+    const chaveUser = 'F81587'
+    async function loadFavorites(userId) {
+        const response = await fetch(`/favoriteApi/GetFavorites?userId=${userId}`);
+        const data = await response.json();
+
+        const favoriteLinks = document.getElementById('favoriteLinks');
+        favoriteLinks.innerHTML = ''; // Limpar a lista antes de recarregar
+        data.Favorites.forEach(link => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+            <a href="${link.Url}" target="_blank">${link.Title}</a>
+            <button onclick="removeFavoriteLink('${userId}', '${link.Title}')">Remover</button>
+        `;
+            favoriteLinks.appendChild(listItem);
+        });
+    }
+
+    async function addFavoriteLink() {
+        const title = document.getElementById('newLinkName').value;
+        const url = document.getElementById('newLinkUrl').value;
+        const userId = chaveUser; // Exemplo de ID
+
+        await fetch(`/favoriteApi/AddFavorite?userId=${userId}&title=${title}&url=${url}`, {
+            method: 'POST'
+        });
+
+        loadFavorites(userId); // Recarregar a lista após adicionar o link
+    }
+
+    async function removeFavoriteLink(userId, title) {
+        await fetch(`/favoriteApi/RemoveFavorite?userId=${userId}&title=${encodeURIComponent(title)}`, {
+            method: 'POST'
+        });
+
+        loadFavorites(userId); // Recarregar a lista após remover o link
+    }
+
+    // Carregar os favoritos ao carregar a página
+    loadFavorites(chaveUser);
+
+
 </script>
